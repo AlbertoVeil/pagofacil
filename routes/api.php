@@ -17,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/get-payments', [App\Http\Controllers\PaymentController::class, 'endpointGetPayments']);
+
+Route::get('/get-payments/tarjet/{tarjet}', [App\Http\Controllers\PaymentController::class, 'endpointGetPaymentTarjet']);
+
+Route::get('/get-payments/amount/{amount}', [App\Http\Controllers\PaymentController::class, 'endpointGetPaymentAmount']);
+
+Route::get('/get-payment/{payment}', [App\Http\Controllers\PaymentController::class, 'endpointGetPayment']);
+
+Route::get('/delete-payment/{payment}', [App\Http\Controllers\PaymentController::class, 'endpointDeletePayment']);

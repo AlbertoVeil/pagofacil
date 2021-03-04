@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -52,17 +53,48 @@ class PaymentController extends Controller
         return redirect()->route('payment');
     }
 
-    public function showPayment(Payment $payment)
+    public function endpointGetPayments()
     {
-        return view('application.payment.payment-show', compact('payment'));
+        $payments = Payment::all();
+
+        return \Response::json($payments);
     }
 
-    public function deletePayment(Payment $payment)
+    public function endpointGetPaymentTarjet($tarjet)
+    {
+        switch ($tarjet) {
+            case 'visa':
+                $payments = Payment::where('TipoTC', 'Visa')->get();
+                return \Response::json($payments);
+            break;
+
+            case 'master':
+                $payments = Payment::where('TipoTC', 'Master Card')->get();
+                return \Response::json($payments);
+            break;
+
+            case 'american':
+                $payments = Payment::where('TipoTC', 'American Express')->get();
+                return \Response::json($payments);
+            break;
+        }
+    }
+
+    public function endpointGetPaymentAmount($amount)
+    {
+        $payments = Payment::where('monto', $amount)->get();
+        return \Response::json($payments);
+    }
+
+    public function endpointGetPayment(Payment $payment)
+    {
+        return \Response::json($payment);
+    }
+
+    public function endpointDeletePayment(Payment $payment)
     {
         $payment->delete();
 
-        session()->flash('success', 'Pago eliminado exitosamente');
-
-        return redirect()->route('payment');
+        return \Response::json($payment);
     }
 }
